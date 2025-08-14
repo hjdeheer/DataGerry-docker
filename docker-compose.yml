@@ -9,11 +9,6 @@ services:
     - datagerry
     environment:
       NGINX_LOCATION_DEFAULT: "/;/;http://datagerry:4000"
-# uncomment for ssl
-#      NGINX_SSL_CERT: "/data/certs/datagerry.pem"
-#      NGINX_SSL_KEY: "/data/certs/datagerry.key"
-#    volumes:
-#      - ./conf/ssl/certs:/data/certs
     restart: unless-stopped
 
   datagerry:
