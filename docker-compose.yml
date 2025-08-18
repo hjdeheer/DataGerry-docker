@@ -5,7 +5,6 @@ services:
     hostname: nginx
     ports:
     - "81:80"
-    - "443:443"
     depends_on:
     - datagerry
     environment:
