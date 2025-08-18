@@ -10,6 +10,10 @@ services:
     environment:
       DATAGERRY_Database_host: "db"
     restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.<unique_router_name>.rule=Host(`coolify.io`) && PathPrefix(`/`)"
+      - traefik.http.routers.<unique_router_name>.entryPoints=http
 
   db:
     image: mongo:6.0.25
@@ -22,3 +26,8 @@ services:
 volumes:
   mongodb-data:
   mongodb-config:
+
+labels:
+  - traefik.enable=true
+  - "traefik.http.routers.<unique_router_name>.rule=Host(`coolify.io`) && PathPrefix(`/`)"
+  - traefik.http.routers.<unique_router_name>.entryPoints=http
