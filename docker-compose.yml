@@ -1,62 +1,26 @@
 services:
+    
   datagerry:
     image: becongmbh/datagerry:latest
     hostname: datagerry
     depends_on:
-      - db
-    # Do NOT expose the port publicly; Traefik will connect over the Docker network
-    # ports:
-    #   - "4000:4000"
+    - db
+    ports:
+    - 4000:4000
     environment:
-      DATAGERRY_Database_host: db
-      SERVICE_URL_DATAGERRY: "https://gerry.cyberwall.nl"
-      SERVICE_FQDN_DATAGERRY: "gerry.cyberwall.nl"
+      DATAGERRY_Database_host: "db"
     restart: unless-stopped
-    container_name: datagerry-qg0ooccwsg08ck8cckkwwg4c-122600451209
 
-    labels:
-      # ---- Traefik only (remove all caddy_* labels) ----
-      - traefik.enable=true
 
-      # HTTP -> HTTPS redirect
-      - traefik.http.middlewares.gerry-redirect.redirectscheme.scheme=https
-      - traefik.http.routers.gerry-http.rule=Host(`gerry.cyberwall.nl`) && PathPrefix(`/`)
-      - traefik.http.routers.gerry-http.entrypoints=http
-      - traefik.http.routers.gerry-http.middlewares=gerry-redirect
-
-      # HTTPS router (Let's Encrypt)
-      - traefik.http.routers.gerry-https.rule=Host(`gerry.cyberwall.nl`) && PathPrefix(`/`)
-      - traefik.http.routers.gerry-https.entrypoints=https
-      - traefik.http.routers.gerry-https.tls=true
-      - traefik.http.routers.gerry-https.tls.certresolver=letsencrypt
-
-      # Tell Traefik which internal port your app listens on
-      - traefik.http.services.gerry.loadbalancer.server.port=4000
-
-      # If Coolify shows a specific proxy network name, set it here:
-      # - traefik.docker.network=qg0ooccwsg08ck8cckkwwg4c
-
-    networks:
-      qg0ooccwsg08ck8cckkwwg4c: {}
 
   db:
     image: mongo:6.0.25
     hostname: db
     restart: unless-stopped
     volumes:
-      - qg0ooccwsg08ck8cckkwwg4c_mongodb-data:/data/db
-      - qg0ooccwsg08ck8cckkwwg4c_mongodb-config:/data/configdb
-    container_name: db-qg0ooccwsg08ck8cckkwwg4c-122600461060
-    networks:
-      qg0ooccwsg08ck8cckkwwg4c: {}
+      - mongodb-data:/data/db
+      - mongodb-config:/data/configdb
 
 volumes:
-  qg0ooccwsg08ck8cckkwwg4c_mongodb-data:
-    name: qg0ooccwsg08ck8cckkwwg4c_mongodb-data
-  qg0ooccwsg08ck8cckkwwg4c_mongodb-config:
-    name: qg0ooccwsg08ck8cckkwwg4c_mongodb-config
-
-networks:
-  qg0ooccwsg08ck8cckkwwg4c:
-    name: qg0ooccwsg08ck8cckkwwg4c
-    external: true
+  mongodb-data:
+  mongodb-config:
