@@ -10,23 +10,7 @@ services:
     environment:
       DATAGERRY_Database_host: "db"
     restart: unless-stopped
-    labels:
-      - traefik.enable=true
-    
-      # HTTP router → redirects to HTTPS
-      - "traefik.http.routers.gerry-http.rule=Host(`gerry.cyberwall.nl`) && PathPrefix(`/`)"
-      - "traefik.http.routers.gerry-http.entryPoints=http"
-      - "traefik.http.middlewares.gerry-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.gerry-http.middlewares=gerry-redirect"
-    
-      # HTTPS router
-      - "traefik.http.routers.gerry-https.rule=Host(`gerry.cyberwall.nl`) && PathPrefix(`/`)"
-      - "traefik.http.routers.gerry-https.entryPoints=https"
-      - "traefik.http.routers.gerry-https.tls=true"
-      - "traefik.http.routers.gerry-https.tls.certresolver=letsencrypt"
-    
-      # Service port inside the container
-      - "traefik.http.services.gerry.loadbalancer.server.port=4000"
+
 
 
   db:
